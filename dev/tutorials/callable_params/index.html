@@ -20,25 +20,25 @@ Interpolation: 3rd order Hermite
 t: 11-element Vector{Float64}:
  0.0
  9.999999999999999e-5
- 0.0010999999999999998
- 0.011099999999999997
- 0.08871574540031633
- 0.37471818442706256
- 0.5006966920204705
- 0.6403305244573025
- 0.8056953224055718
- 0.9512859886829502
+ 0.020768271895956966
+ 0.18076896492572397
+ 0.2638627040862424
+ 0.3587496736334498
+ 0.46672346987469
+ 0.5920660202811957
+ 0.7343482438510673
+ 0.8817183565159847
  1.0
 u: 11-element Vector{Vector{Float64}}:
  [0.0]
  [4.999999999999996e-10]
- [6.05e-8]
- [6.160499999999991e-6]
- [0.0003935241740966876]
- [0.018157357136368037]
- [0.04269272404953991]
- [0.08861628894870739]
- [0.17582100258715175]
- [0.2887375056076445]
- [0.3351971147710265]</code></pre><p>Note that the the following will not work:</p><pre><code class="language-julia hljs">ODEProblem(
-    sys; [x =&gt; 0.0, interp =&gt; LinearInterpolation(0.0:0.1:1.0, 0.0:0.1:1.0)], (0.0, 1.0))</code></pre><p>Since the type of the spline doesn&#39;t match.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../domain_connections/">« Domains</a><a class="docs-footer-nextpage" href="../linear_analysis/">Linear Analysis »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 24 February 2026 13:40">Tuesday 24 February 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ [2.1566055877219813e-5]
+ [0.002333414407687976]
+ [0.006616118174212182]
+ [0.016023553486348673]
+ [0.034689722404895276]
+ [0.07016196352145625]
+ [0.1332086220860238]
+ [0.22998406462774956]
+ [0.33501640530706894]</code></pre><p>Note that the the following will not work:</p><pre><code class="language-julia hljs">ODEProblem(
+    sys; [x =&gt; 0.0, interp =&gt; LinearInterpolation(0.0:0.1:1.0, 0.0:0.1:1.0)], (0.0, 1.0))</code></pre><p>Since the type of the spline doesn&#39;t match.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../domain_connections/">« Domains</a><a class="docs-footer-nextpage" href="../linear_analysis/">Linear Analysis »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 26 March 2026 15:20">Thursday 26 March 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

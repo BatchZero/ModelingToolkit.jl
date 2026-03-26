@@ -150,8 +150,8 @@ sir = compose(
 
 equations(sireqn_simple)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">3-element Vector{Equation}:
  Differential(t, 1)(reqn₊R(t)) ~ reqn₊γ*reqn₊I(t)
- Differential(t, 1)(ieqn₊I(t)) ~ (ieqn₊β*ieqn₊S(t)*ieqn₊I(t)) / (ieqn₊S(t) + ieqn₊I(t) + ieqn₊R(t)) - ieqn₊γ*ieqn₊I(t)
- Differential(t, 1)(seqn₊S(t)) ~ (seqn₊β*seqn₊I(t)*seqn₊S(t)) / (-seqn₊R(t) - seqn₊I(t) - seqn₊S(t))</code></pre><pre><code class="language-julia hljs">## User Code
+ Differential(t, 1)(ieqn₊I(t)) ~ (ieqn₊β*ieqn₊I(t)*ieqn₊S(t)) / (ieqn₊R(t) + ieqn₊I(t) + ieqn₊S(t)) - ieqn₊γ*ieqn₊I(t)
+ Differential(t, 1)(seqn₊S(t)) ~ (seqn₊β*seqn₊I(t)*seqn₊S(t)) / (-seqn₊I(t) - seqn₊R(t) - seqn₊S(t))</code></pre><pre><code class="language-julia hljs">## User Code
 
 u0 = [seqn.S =&gt; 990.0,
     ieqn.I =&gt; 10.0,
@@ -163,22 +163,21 @@ p = [β =&gt; 0.5
 tspan = (0.0, 40.0)
 prob = ODEProblem(sireqn_simple, u0, tspan, p, jac = true)
 sol = solve(prob, Tsit5())
-sol[reqn.R]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">18-element Vector{Float64}:
+sol[reqn.R]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">17-element Vector{Float64}:
    0.0
    0.0014142401338982807
-   0.015567426114815186
-   0.1581830690301042
-   1.0627159962527783
-   3.39067660741407
-   7.785038823291197
-  15.476270570721189
-  30.10218714997556
-  58.804758738885994
- 116.64583849419031
- 221.07867749201975
- 368.86570081874015
- 519.3989571642146
- 655.4762160875093
- 723.9496310639512
- 772.9457994133213
- 775.683591914308</code></pre><h2 id="Tearing-Problem-Construction"><a class="docs-heading-anchor" href="#Tearing-Problem-Construction">Tearing Problem Construction</a><a id="Tearing-Problem-Construction-1"></a><a class="docs-heading-anchor-permalink" href="#Tearing-Problem-Construction" title="Permalink"></a></h2><p>Some system types (specifically <code>NonlinearSystem</code>) can be further reduced if <code>mtkcompile</code> has already been applied to them. This is done by using the alternative problem constructors (<code>BlockNonlinearProblem</code>). In these cases, the constructor uses the knowledge of the strongly connected components calculated during the process of simplification as the basis for building pre-simplified nonlinear systems in the implicit solving. In summary: these problems are structurally modified, but could be more efficient and more stable.</p><h2 id="Components-with-discontinuous-dynamics"><a class="docs-heading-anchor" href="#Components-with-discontinuous-dynamics">Components with discontinuous dynamics</a><a id="Components-with-discontinuous-dynamics-1"></a><a class="docs-heading-anchor-permalink" href="#Components-with-discontinuous-dynamics" title="Permalink"></a></h2><p>When modeling, e.g., impacts, saturations or Coulomb friction, the dynamic equations are discontinuous in either the unknown or one of its derivatives. This causes the solver to take very small steps around the discontinuity, and sometimes leads to early stopping due to <code>dt &lt;= dt_min</code>. The correct way to handle such dynamics is to tell the solver about the discontinuity by a root-finding equation, which can be modeling using <a href="@ref"><code>System</code></a>&#39;s event support. Please see the tutorial on <a href="../Events/#events">Callbacks and Events</a> for details and examples.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../API/PDESystem/">« PDESystem</a><a class="docs-footer-nextpage" href="../Events/">Event Handling and Callback Functions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 24 February 2026 13:40">Tuesday 24 February 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+   0.050710508348968966
+   0.5569503632211427
+   2.239330321746509
+   5.7043279986999895
+  11.767599301965697
+  23.039022073525285
+  44.76365423236423
+  88.6860927861941
+ 172.1387585010295
+ 311.9267691175351
+ 461.0604146111041
+ 610.3511954751649
+ 698.8860051197079
+ 754.7682924688806
+ 775.6941244412747</code></pre><h2 id="Tearing-Problem-Construction"><a class="docs-heading-anchor" href="#Tearing-Problem-Construction">Tearing Problem Construction</a><a id="Tearing-Problem-Construction-1"></a><a class="docs-heading-anchor-permalink" href="#Tearing-Problem-Construction" title="Permalink"></a></h2><p>Some system types (specifically <code>NonlinearSystem</code>) can be further reduced if <code>mtkcompile</code> has already been applied to them. This is done by using the alternative problem constructors (<code>BlockNonlinearProblem</code>). In these cases, the constructor uses the knowledge of the strongly connected components calculated during the process of simplification as the basis for building pre-simplified nonlinear systems in the implicit solving. In summary: these problems are structurally modified, but could be more efficient and more stable.</p><h2 id="Components-with-discontinuous-dynamics"><a class="docs-heading-anchor" href="#Components-with-discontinuous-dynamics">Components with discontinuous dynamics</a><a id="Components-with-discontinuous-dynamics-1"></a><a class="docs-heading-anchor-permalink" href="#Components-with-discontinuous-dynamics" title="Permalink"></a></h2><p>When modeling, e.g., impacts, saturations or Coulomb friction, the dynamic equations are discontinuous in either the unknown or one of its derivatives. This causes the solver to take very small steps around the discontinuity, and sometimes leads to early stopping due to <code>dt &lt;= dt_min</code>. The correct way to handle such dynamics is to tell the solver about the discontinuity by a root-finding equation, which can be modeling using <a href="@ref"><code>System</code></a>&#39;s event support. Please see the tutorial on <a href="../Events/#events">Callbacks and Events</a> for details and examples.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../API/PDESystem/">« PDESystem</a><a class="docs-footer-nextpage" href="../Events/">Event Handling and Callback Functions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 26 March 2026 15:20">Thursday 26 March 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

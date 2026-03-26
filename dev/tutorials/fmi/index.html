@@ -84,13 +84,13 @@ Type:		0</code></pre><p>Following are the variables in the FMU (both states and 
 \frac{\mathrm{d} ~ \mathtt{mass\_\_v}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{mass\_\_a}\left( t \right)
 \end{align}
  \]</p><p>Since the FMI spec allows multiple names to alias the same quantity, ModelingToolkit.jl creates equations to alias them. For example, it can be seen above that <code>der(mass.v)</code> and <code>mass.a</code> have the same reference, and hence refer to the same quantity. Correspondingly, there is an equation <code>mass__vˍt(t) ~ mass__a(t)</code> in the system.</p><div class="admonition is-info" id="Note-e4322cbab97696dc"><header class="admonition-header">Note<a class="admonition-anchor" href="#Note-e4322cbab97696dc" title="Permalink"></a></header><div class="admonition-body"><p>Any variables and/or parameters that are not part of the FMU should be ignored, as ModelingToolkit creates them to manage the FMU. Unexpected usage of these variables/parameters can lead to errors.</p></div></div><pre><code class="language-julia hljs">initial_conditions(model)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">ModelingToolkitBase.AtomicArrayDict{SymbolicUtils.BasicSymbolicImpl.var&quot;typeof(BasicSymbolicImpl)&quot;{SymReal}, Dict{SymbolicUtils.BasicSymbolicImpl.var&quot;typeof(BasicSymbolicImpl)&quot;{SymReal}, SymbolicUtils.BasicSymbolicImpl.var&quot;typeof(BasicSymbolicImpl)&quot;{SymReal}}} with 8 entries:
-  fixed__s0      =&gt; <span class="sgr34">0.1</span>
-  mass__L        =&gt; <span class="sgr34">0.0</span>
-  spring__s_rel0 =&gt; <span class="sgr34">1.0</span>
-  mass__m        =&gt; <span class="sgr34">1.0</span>
-  mass_s0        =&gt; <span class="sgr34">0.5</span>
-  mass_v0        =&gt; <span class="sgr34">0.0</span>
   spring__c      =&gt; <span class="sgr34">10.0</span>
+  mass_s0        =&gt; <span class="sgr34">0.5</span>
+  mass__m        =&gt; <span class="sgr34">1.0</span>
+  spring__s_rel0 =&gt; <span class="sgr34">1.0</span>
+  mass_v0        =&gt; <span class="sgr34">0.0</span>
+  mass__L        =&gt; <span class="sgr34">0.0</span>
+  fixed__s0      =&gt; <span class="sgr34">0.1</span>
   wrapper        =&gt; <span class="sgr34">FMI2InstanceWrapper(Model name:	SpringPendulum1D</span>…</code></pre><p>All parameters in the FMU are given a default equal to their start value, if present. Unknowns are not assigned defaults even if a start value is present, as this would conflict with ModelingToolkit&#39;s own initialization semantics.</p><p>We can simulate this model like any other ModelingToolkit system.</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; sys = mtkcompile(model)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">Model model:</span>
 <span class="sgr1">Equations (2):</span>
   2 standard: see equations(model)
@@ -114,64 +114,64 @@ Interpolation: specialized 4th order &quot;free&quot; interpolation
 t: 27-element Vector{Float64}:
  0.0
  0.000166333998669328
- 0.0018296739853626079
- 0.018252579723965046
- 0.0628049056311173
- 0.13413221122185767
- 0.2252251078153471
- 0.34307293314593845
- 0.4851522825708655
- 0.654234363960229
+ 0.007612156340715198
+ 0.038759557342918374
+ 0.09868724552233858
+ 0.18162804990045944
+ 0.2880424821207263
+ 0.420135539517855
+ 0.5777250812885983
+ 0.7630868678206069
  ⋮
- 2.773106309624708
- 3.0696711661525975
- 3.3355266332155713
- 3.61284460826946
- 3.8965775480896196
- 4.1865811396986174
- 4.450238792425324
- 4.739873150383787
+ 2.933563071260652
+ 3.2327390005480634
+ 3.4907079817488604
+ 3.7811872840022924
+ 4.072998802512932
+ 4.340174031028605
+ 4.624026237023426
+ 4.911141908930269
  5.0
 u: 27-element Vector{Vector{Float64}}:
  [0.0, 0.5]
  [0.0009980039459963424, 0.5000000830009954]
- [0.010977982660156045, 0.5000100430926603]
- [0.10945467878676397, 0.5009991925476527]
- [0.37435700342546413, 0.5117945229973937]
- [0.78087710666022, 0.553169961473471]
- [1.2399651648989518, 0.6458539614147021]
- [1.6777520939766748, 0.8197951743428017]
- [1.8960950953398443, 1.0780395114834158]
- [1.666841136224399, 1.3866429193564562]
+ [0.0456685273138661, 0.5001738263785974]
+ [0.23197549521490854, 0.5045012704171938]
+ [0.5825588497209642, 0.528981158435263]
+ [1.0308320658480916, 0.5962753560433142]
+ [1.4989910219595635, 0.7321650358823302]
+ [1.8419826130350077, 0.9560905274789359]
+ [1.8354684483960875, 1.2520050285033784]
+ [1.2631646227307032, 1.5477075989953766]
  ⋮
- [1.156202201943752, 1.5758237423985975]
- [-0.5294764383038312, 1.6762880030595169]
- [-1.7111077766321607, 1.3595658190587951]
- [-1.725301556941077, 0.8499456518266287]
- [-0.45800694663626157, 0.5175451840772557]
- [1.1838110149591914, 0.6308152690522649]
- [1.8943128948707495, 1.0618874727123693]
- [1.2493052977445305, 1.5519539450537894]
- [-0.19764541877156047, 1.6970341025378801]</code></pre><p>We can interpolate the solution object to obtain values at arbitrary time points in the solved interval, just like a normal solution.</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; sol(0.0:0.1:1.0; idxs = sys.mass__a)</code><code class="nohighlight hljs ansi" style="display:block;">t: 0.0:0.1:1.0
+ [0.27930871295271026, 1.6935526817327027]
+ [-1.3593723264177335, 1.5187776924366758]
+ [-1.8960470302542378, 1.0739089615157789]
+ [-1.085156686420992, 0.6075887825397652]
+ [0.5867078249180563, 0.5291675946069041]
+ [1.7396084276284258, 0.8598533005603833]
+ [1.6783525604221563, 1.380436308188728]
+ [0.33363891137586116, 1.690965858385727]
+ [-0.1976842009890052, 1.6970462493048293]</code></pre><p>We can interpolate the solution object to obtain values at arbitrary time points in the solved interval, just like a normal solution.</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; sol(0.0:0.1:1.0; idxs = sys.mass__a)</code><code class="nohighlight hljs ansi" style="display:block;">t: 0.0:0.1:1.0
 u: 11-element Vector{Float64}:
   6.0
-  5.702491934784343
-  4.839471321591136
-  3.4965252967232963
-  1.80682032937456
- -0.06206738016019786
- -1.92478494171483
- -3.596720289188662
- -4.911860592107546
- -5.740015946259421
- -5.998918735174237</code></pre><p>FMUs following version 3 of the specification can be simulated with almost the same process. This time, we will create a model from a CoSimulation FMU.</p><pre><code class="language-julia hljs">fmu = loadFMU(&quot;SpringPendulum1D&quot;, &quot;Dymola&quot;, &quot;2023x&quot;, &quot;3.0&quot;; type = :CS)
+  5.702491667019957
+  4.839470000409749
+  3.4965197236482
+  1.8068257009886046
+ -0.06206127185396815
+ -1.9248123934754147
+ -3.5966611894387213
+ -4.911909483372305
+ -5.740057734411293
+ -5.998764941213555</code></pre><p>FMUs following version 3 of the specification can be simulated with almost the same process. This time, we will create a model from a CoSimulation FMU.</p><pre><code class="language-julia hljs">fmu = loadFMU(&quot;SpringPendulum1D&quot;, &quot;Dymola&quot;, &quot;2023x&quot;, &quot;3.0&quot;; type = :CS)
 @named inner = ModelingToolkit.FMIComponent(
     Val(3); fmu, communication_step_size = 0.001, type = :CS,
     reinitializealg = BrownFullBasicInit())</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">┌ Warning: FMU has UnitDefinitions, but parsing is not implemented yet.
 └ @ FMIImport ~/.julia/packages/FMIImport/FDQnX/src/FMI3/md.jl:159
 ┌ Warning: FMU has TypeDefinitions, but parsing is not implemented yet.
 └ @ FMIImport ~/.julia/packages/FMIImport/FDQnX/src/FMI3/md.jl:159
-[ Info: createFMU3(...): FMU resources location is `file:////tmp/fmijl_HRED3D/SpringPendulum1D/resources`
+[ Info: createFMU3(...): FMU resources location is `file:////tmp/fmijl_Yp15gc/SpringPendulum1D/resources`
 [ Info: createFMU3(...): FMU supports both CS and ME, using CS as default if nothing specified.</code></pre><p>This FMU has fewer equations, partly due to missing aliasing variables and partly due to being a CS FMU. CoSimulation FMUs are bundled with an integrator. As such, they do not function like ME FMUs. Instead, a callback steps the FMU at periodic intervals in time and obtains the updated state. This state is held constant until the next time the callback triggers. The periodic interval must be specified through the <code>communication_step_size</code> keyword argument. A smaller step size typically leads to less error but is more computationally expensive.</p><p>This model alone does not have any differential variables, and calling <code>mtkcompile</code> will lead to an <code>System</code> with no unknowns.</p><pre><code class="language-julia hljs">mtkcompile(inner)</code></pre><p class="math-container">\[ \begin{align}
 \end{align}
  \]</p><p>Simulating this model will cause the OrdinaryDiffEq integrator to immediately finish, and will not trigger the callback. Thus, we wrap this system in a trivial system with a differential variable.</p><pre><code class="language-julia hljs">@variables x(t) = 1.0
@@ -296,29 +296,29 @@ Interpolation: specialized 4th (Rodas6P = 5th) order &quot;free&quot; stiffness-
 t: 12-element Vector{Float64}:
  0.0
  1.0e-6
- 1.1e-5
- 0.00011099999999999999
- 0.0011109999999999998
- 0.011110999999999996
- 0.06777124366582819
- 0.18657088035722688
- 0.35273368623105417
- 0.599664464927633
- 0.7975153241709474
+ 3.3712164065407424e-5
+ 0.00036083380471948166
+ 0.003632050211260224
+ 0.03634421427666765
+ 0.1305978836311682
+ 0.27845849749913176
+ 0.48030578696165416
+ 0.685366910284355
+ 0.9024931314282548
  1.0
 u: 12-element Vector{Vector{Float64}}:
  [2.4494897532242415, 2.0, 1.0, 1.0]
  [2.449490967528866, 2.000004000003, 1.000006000005, 1.0000000000005]
- [2.4495032150755596, 2.0000440003630024, 1.0000660006050037, 1.0000000000605]
- [2.4496256995241894, 2.000444036965507, 1.000666061608875, 1.0000000061605]
- [2.4508514423874646, 2.004447705478185, 1.006672175492215, 1.0000006171605003]
- [2.4631989166722104, 2.0448168885834144, 1.0672871759358862, 1.0000617271605003]
- [2.536295668463163, 2.2854497416566963, 1.430499256231789, 1.002296470734007]
- [2.707540580733233, 2.8635295467403505, 2.3133720579221113, 1.0174043466986358]
- [2.9908840314929312, 3.877028827407116, 3.8831760819175747, 1.0622105267010742]
- [3.517425735786769, 5.985839124963365, 7.192344343404128, 1.179798735248474]
- [4.042934317902298, 8.409535950775757, 11.027171855243175, 1.3180153461437485]
- [4.6910412227764855, 11.855536157898882, 16.505550564182816, 1.5000000000000042]</code></pre><p>CoSimulation FMUs follow a nearly identical process. Since CoSimulation FMUs operate using callbacks, after triggering the callbacks and altering the discrete state the algebraic equations may no longer be satisfied. To resolve for the values of algebraic variables, we use the <code>reinitializealg</code> keyword of <code>FMIComponent</code>. This is a DAE initialization algorithm to use at the end of every callback. Since CoSimulation FMUs are not directly involved in the RHS of the system - instead operating through callbacks - we can use a solver with automatic differentiation.</p><pre><code class="language-julia hljs">fmu = loadFMU(
+ [2.449531032511184, 2.000134852065862, 1.000202278667051, 1.0000000005682552]
+ [2.4499317784516244, 2.001443725908126, 1.0021656539666224, 1.0000000651005174]
+ [2.45394885685563, 2.014567864175605, 1.021858396168689, 1.0000065958943687]
+ [2.49508884120017, 2.14942882676354, 1.2248078750472842, 1.0006604509556944]
+ [2.6237491065627436, 2.5778578575383344, 1.8755316018699255, 1.00852790360447]
+ [2.8576360749029144, 3.390716177623135, 3.127315050369631, 1.0387695674147368]
+ [3.246180023336325, 4.860967189591723, 5.42231878070794, 1.1153468244944271]
+ [3.732895729986476, 6.940110310886923, 8.699552415653608, 1.2348639008563627]
+ [4.364044744730068, 10.053066304190827, 13.637306231012989, 1.4072469261375897]
+ [4.691007998685333, 11.855536362457716, 16.50555089501592, 1.5000000000000024]</code></pre><p>CoSimulation FMUs follow a nearly identical process. Since CoSimulation FMUs operate using callbacks, after triggering the callbacks and altering the discrete state the algebraic equations may no longer be satisfied. To resolve for the values of algebraic variables, we use the <code>reinitializealg</code> keyword of <code>FMIComponent</code>. This is a DAE initialization algorithm to use at the end of every callback. Since CoSimulation FMUs are not directly involved in the RHS of the system - instead operating through callbacks - we can use a solver with automatic differentiation.</p><pre><code class="language-julia hljs">fmu = loadFMU(
     joinpath(@__DIR__, &quot;..&quot;, &quot;..&quot;, &quot;..&quot;, &quot;test&quot;, &quot;fmi&quot;, &quot;fmus&quot;, &quot;SimpleAdder.fmu&quot;);
     type = :CS)
 @named adder = ModelingToolkit.FMIComponent(
@@ -338,8 +338,8 @@ t: 2004-element Vector{Float64}:
  0.0
  0.0
  1.0e-6
- 1.1e-5
- 0.00011099999999999999
+ 3.225207878393162e-5
+ 0.0003447728666232478
  0.001
  0.001
  0.002
@@ -359,20 +359,20 @@ u: 2004-element Vector{Vector{Float64}}:
  [2.2360679786694857, 1.0, 1.0]
  [2.2360679786694857, 1.0, 1.0]
  [2.23606797749979, 1.000005, 1.0000000000005]
- [2.23606797749979, 1.0000550000000001, 1.0000000000605]
- [2.23606797749979, 1.000555, 1.0000000061605]
- [2.23606797749979, 1.005, 1.0000005]
- [2.45051025298814, 1.005, 1.0000005]
- [2.45051025298814, 1.0110090055004999, 1.000002]
- [2.4517363246283344, 1.0110090055004999, 1.000002]
- [2.4517363246280173, 1.0170280325175058, 1.0000045]
+ [2.23606797749979, 1.0001612603939198, 1.0000000005200984]
+ [2.23606797749979, 1.0017238643331163, 1.0000000594341647]
+ [2.23606797749979, 1.0050000000000001, 1.0000004999999998]
+ [2.45051025298814, 1.0050000000000001, 1.0000004999999998]
+ [2.45051025298814, 1.0110090055005, 1.0000019999999998]
+ [2.4517363246283344, 1.0110090055005, 1.0000019999999998]
+ [2.4517363246280173, 1.017028032517506, 1.0000044999999997]
  ⋮
- [4.671293088935029, 16.35754369983386, 1.4960079999999851]
- [4.674778251409642, 16.35754369983386, 1.4960079999999851]
- [4.674778251407637, 16.389173203064352, 1.497004499999985]
- [4.6782665275808215, 16.389173203064352, 1.497004499999985]
- [4.678266527578814, 16.420855218475776, 1.498001999999985]
- [4.681757919680873, 16.420855218475776, 1.498001999999985]
- [4.681757919678864, 16.45258983225982, 1.499000499999985]
- [4.685252429942133, 16.45258983225982, 1.499000499999985]
- [4.68525242994012, 16.484377130747994, 1.4999999999999851]</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../disturbance_modeling/">« Disturbance and input modeling modeling</a><a class="docs-footer-nextpage" href="../../examples/higher_order/">Automatic Transformation of Nth Order ODEs to 1st Order ODEs »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 24 February 2026 13:40">Tuesday 24 February 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ [4.671293088935029, 16.35754369983386, 1.4960079999999847]
+ [4.674778251409642, 16.35754369983386, 1.4960079999999847]
+ [4.674778251407637, 16.389173203064352, 1.4970044999999845]
+ [4.6782665275808215, 16.389173203064352, 1.4970044999999845]
+ [4.678266527578814, 16.420855218475776, 1.4980019999999845]
+ [4.681757919680873, 16.420855218475776, 1.4980019999999845]
+ [4.681757919678864, 16.45258983225982, 1.4990004999999846]
+ [4.685252429942133, 16.45258983225982, 1.4990004999999846]
+ [4.68525242994012, 16.484377130747994, 1.4999999999999847]</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../disturbance_modeling/">« Disturbance and input modeling modeling</a><a class="docs-footer-nextpage" href="../../examples/higher_order/">Automatic Transformation of Nth Order ODEs to 1st Order ODEs »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 26 March 2026 15:20">Thursday 26 March 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

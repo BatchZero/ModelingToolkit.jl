@@ -78,7 +78,7 @@ u0 = [
 ]
 prob = ODEProblem(rc_model, u0, (0, 10.0))
 sol = solve(prob)
-plot(sol)</code></pre><img src="381575b8.svg" alt="Example block output"/><h2 id="Explanation"><a class="docs-heading-anchor" href="#Explanation">Explanation</a><a id="Explanation-1"></a><a class="docs-heading-anchor-permalink" href="#Explanation" title="Permalink"></a></h2><p>We wish to build the following RC circuit by building individual components and connecting the pins:</p><p><img src="https://user-images.githubusercontent.com/1814174/172466302-907d39f3-6d2c-4d16-84a8-6de32bca757e.png" alt/></p><h3 id="Building-the-Component-Library"><a class="docs-heading-anchor" href="#Building-the-Component-Library">Building the Component Library</a><a id="Building-the-Component-Library-1"></a><a class="docs-heading-anchor-permalink" href="#Building-the-Component-Library" title="Permalink"></a></h3><p>For each of our components, we define a function that returns a <code>System</code>. At the top, we start with defining the fundamental qualities of an electric circuit component. At every input and output pin, a circuit component has two values: the current at the pin and the voltage. Thus we define the <code>Pin</code> connector to simply be the values there. Whenever two <code>Pin</code>s in a circuit are connected together, the system satisfies <a href="https://en.wikipedia.org/wiki/Kirchhoff%27s_circuit_laws">Kirchhoff&#39;s laws</a>, i.e. that currents sum to zero and voltages across the pins are equal. <code>[connect = Flow]</code> informs MTK that currents ought to sum to zero, and by default, variables are equal in a connection.</p><pre><code class="language-julia hljs">function Pin(; name)
+plot(sol)</code></pre><img src="f972d9e5.svg" alt="Example block output"/><h2 id="Explanation"><a class="docs-heading-anchor" href="#Explanation">Explanation</a><a id="Explanation-1"></a><a class="docs-heading-anchor-permalink" href="#Explanation" title="Permalink"></a></h2><p>We wish to build the following RC circuit by building individual components and connecting the pins:</p><p><img src="https://user-images.githubusercontent.com/1814174/172466302-907d39f3-6d2c-4d16-84a8-6de32bca757e.png" alt/></p><h3 id="Building-the-Component-Library"><a class="docs-heading-anchor" href="#Building-the-Component-Library">Building the Component Library</a><a id="Building-the-Component-Library-1"></a><a class="docs-heading-anchor-permalink" href="#Building-the-Component-Library" title="Permalink"></a></h3><p>For each of our components, we define a function that returns a <code>System</code>. At the top, we start with defining the fundamental qualities of an electric circuit component. At every input and output pin, a circuit component has two values: the current at the pin and the voltage. Thus we define the <code>Pin</code> connector to simply be the values there. Whenever two <code>Pin</code>s in a circuit are connected together, the system satisfies <a href="https://en.wikipedia.org/wiki/Kirchhoff%27s_circuit_laws">Kirchhoff&#39;s laws</a>, i.e. that currents sum to zero and voltages across the pins are equal. <code>[connect = Flow]</code> informs MTK that currents ought to sum to zero, and by default, variables are equal in a connection.</p><pre><code class="language-julia hljs">function Pin(; name)
     @variables v(t) i(t) [connect = Flow]
     sys = System(Equation[], t, [v, i], []; name)
     sys = @set sys.connector_type = ModelingToolkit.connector_type(sys)
@@ -148,60 +148,60 @@ rc_model = mtkcompile(rc_model)</code></pre><pre class="documenter-example-outpu
  resistor₊R
  capacitor₊C
  source₊V</code></pre><p>The observed equations are:</p><pre><code class="language-julia hljs">observed(rc_model)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">19-element Vector{Equation}:
- ground₊g₊i(t) ~ <span class="sgr34">0</span>
  ground₊g₊v(t) ~ <span class="sgr34">0</span>
  source₊v(t) ~ source₊V
  capacitor₊n₊v(t) ~ <span class="sgr34">0</span>
  capacitor₊p₊v(t) ~ capacitor₊v(t)
  resistor₊v(t) ~ source₊v(t) - capacitor₊v(t)
- source₊p₊v(t) ~ capacitor₊n₊v(t) + source₊v(t)
  source₊n₊v(t) ~ capacitor₊n₊v(t)
+ source₊p₊v(t) ~ source₊v(t) + capacitor₊n₊v(t)
  resistor₊n₊v(t) ~ capacitor₊p₊v(t)
  resistor₊i(t) ~ resistor₊v(t) / resistor₊R
  resistor₊p₊v(t) ~ source₊p₊v(t)
+ source₊n₊i(t) ~ resistor₊i(t)
+ source₊p₊i(t) ~ -resistor₊i(t)
  capacitor₊i(t) ~ resistor₊i(t)
- source₊n₊i(t) ~ capacitor₊i(t)
- source₊p₊i(t) ~ -capacitor₊i(t)
- resistor₊p₊i(t) ~ capacitor₊i(t)
- capacitor₊p₊i(t) ~ capacitor₊i(t)
+ resistor₊p₊i(t) ~ resistor₊i(t)
  source₊i(t) ~ source₊p₊i(t)
- resistor₊n₊i(t) ~ -capacitor₊p₊i(t)
- capacitor₊n₊i(t) ~ -capacitor₊p₊i(t)</code></pre><h2 id="Solving-this-System"><a class="docs-heading-anchor" href="#Solving-this-System">Solving this System</a><a id="Solving-this-System-1"></a><a class="docs-heading-anchor-permalink" href="#Solving-this-System" title="Permalink"></a></h2><p>We are left with a system of only two equations with two unknown variables. One of the equations is a differential equation, while the other is an algebraic equation. We can then give the values for the initial conditions of our unknowns, and solve the system by converting it to an ODEProblem in mass matrix form and solving it with an <a href="https://docs.sciml.ai/DiffEqDocs/stable/solvers/dae_solve/#OrdinaryDiffEq.jl-(Mass-Matrix)">ODEProblem mass matrix DAE solver</a>. This is done as follows:</p><pre><code class="language-julia hljs">u0 = [rc_model.capacitor.v =&gt; 0.0]
+ resistor₊n₊i(t) ~ -capacitor₊i(t)
+ capacitor₊n₊i(t) ~ -capacitor₊i(t)
+ capacitor₊p₊i(t) ~ capacitor₊i(t)
+ ground₊g₊i(t) ~ capacitor₊i(t) - resistor₊i(t)</code></pre><h2 id="Solving-this-System"><a class="docs-heading-anchor" href="#Solving-this-System">Solving this System</a><a id="Solving-this-System-1"></a><a class="docs-heading-anchor-permalink" href="#Solving-this-System" title="Permalink"></a></h2><p>We are left with a system of only two equations with two unknown variables. One of the equations is a differential equation, while the other is an algebraic equation. We can then give the values for the initial conditions of our unknowns, and solve the system by converting it to an ODEProblem in mass matrix form and solving it with an <a href="https://docs.sciml.ai/DiffEqDocs/stable/solvers/dae_solve/#OrdinaryDiffEq.jl-(Mass-Matrix)">ODEProblem mass matrix DAE solver</a>. This is done as follows:</p><pre><code class="language-julia hljs">u0 = [rc_model.capacitor.v =&gt; 0.0]
 
 prob = ODEProblem(rc_model, u0, (0, 10.0))
 sol = solve(prob)
-plot(sol)</code></pre><img src="10f86dea.svg" alt="Example block output"/><p>By default, this plots only the unknown variables that had to be solved for. However, what if we wanted to plot the timeseries of a different variable? Do not worry, that information was not thrown away! Instead, transformations like <code>mtkcompile</code> simply change unknown variables into observables which are defined by <code>observed</code> equations.</p><pre><code class="language-julia hljs">observed(rc_model)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">19-element Vector{Equation}:
- ground₊g₊i(t) ~ <span class="sgr34">0</span>
+plot(sol)</code></pre><img src="aff38b4d.svg" alt="Example block output"/><p>By default, this plots only the unknown variables that had to be solved for. However, what if we wanted to plot the timeseries of a different variable? Do not worry, that information was not thrown away! Instead, transformations like <code>mtkcompile</code> simply change unknown variables into observables which are defined by <code>observed</code> equations.</p><pre><code class="language-julia hljs">observed(rc_model)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">19-element Vector{Equation}:
  ground₊g₊v(t) ~ <span class="sgr34">0</span>
  source₊v(t) ~ source₊V
  capacitor₊n₊v(t) ~ <span class="sgr34">0</span>
  capacitor₊p₊v(t) ~ capacitor₊v(t)
  resistor₊v(t) ~ source₊v(t) - capacitor₊v(t)
- source₊p₊v(t) ~ capacitor₊n₊v(t) + source₊v(t)
  source₊n₊v(t) ~ capacitor₊n₊v(t)
+ source₊p₊v(t) ~ source₊v(t) + capacitor₊n₊v(t)
  resistor₊n₊v(t) ~ capacitor₊p₊v(t)
  resistor₊i(t) ~ resistor₊v(t) / resistor₊R
  resistor₊p₊v(t) ~ source₊p₊v(t)
+ source₊n₊i(t) ~ resistor₊i(t)
+ source₊p₊i(t) ~ -resistor₊i(t)
  capacitor₊i(t) ~ resistor₊i(t)
- source₊n₊i(t) ~ capacitor₊i(t)
- source₊p₊i(t) ~ -capacitor₊i(t)
- resistor₊p₊i(t) ~ capacitor₊i(t)
- capacitor₊p₊i(t) ~ capacitor₊i(t)
+ resistor₊p₊i(t) ~ resistor₊i(t)
  source₊i(t) ~ source₊p₊i(t)
- resistor₊n₊i(t) ~ -capacitor₊p₊i(t)
- capacitor₊n₊i(t) ~ -capacitor₊p₊i(t)</code></pre><p>These are explicit algebraic equations which can then be used to reconstruct the required variables on the fly. This leads to dramatic computational savings because implicitly solving an ODE scales like O(n^3), so making there be as few unknowns as possible is good!</p><p>The solution object can be accessed via its symbols. For example, let&#39;s retrieve the voltage of the resistor over time:</p><pre><code class="language-julia hljs">sol[rc_model.resistor.v]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">15-element Vector{Float64}:
+ resistor₊n₊i(t) ~ -capacitor₊i(t)
+ capacitor₊n₊i(t) ~ -capacitor₊i(t)
+ capacitor₊p₊i(t) ~ capacitor₊i(t)
+ ground₊g₊i(t) ~ capacitor₊i(t) - resistor₊i(t)</code></pre><p>These are explicit algebraic equations which can then be used to reconstruct the required variables on the fly. This leads to dramatic computational savings because implicitly solving an ODE scales like O(n^3), so making there be as few unknowns as possible is good!</p><p>The solution object can be accessed via its symbols. For example, let&#39;s retrieve the voltage of the resistor over time:</p><pre><code class="language-julia hljs">sol[rc_model.resistor.v]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">15-element Vector{Float64}:
  1.0
  0.9999500012499791
- 0.9994501512222747
- 0.9944653727971767
- 0.9469527040251715
- 0.8312914349204991
- 0.6767789419497787
- 0.5208174605055126
- 0.3694346757039162
- 0.24258326500098903
- 0.14523568116402397
- 0.07897257468522012
- 0.03841787869050861
- 0.016483226760988345
- 0.006741257427527181</code></pre><p>or we can plot the timeseries of the resistor&#39;s voltage:</p><pre><code class="language-julia hljs">plot(sol, idxs = [rc_model.resistor.v])</code></pre><img src="854422e5.svg" alt="Example block output"/><p>Although it may be more confusing than helpful here, we can of course also plot all unknown and observed variables together:</p><pre><code class="language-julia hljs">plot(sol, idxs = [unknowns(rc_model); observables(rc_model)])</code></pre><img src="9b092d5b.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../ode_modeling/">« Getting Started with ModelingToolkit.jl</a><a class="docs-footer-nextpage" href="../nonlinear/">Modeling Nonlinear Systems »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 24 February 2026 13:41">Tuesday 24 February 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ 0.9976745949239878
+ 0.9752033717531186
+ 0.8881979859594271
+ 0.7453100187547193
+ 0.586453566183061
+ 0.4297830444924591
+ 0.29099213217138065
+ 0.1807884125446958
+ 0.1021948124931723
+ 0.052025200389154036
+ 0.023509363644605985
+ 0.009239622170661654
+ 0.006741324364619716</code></pre><p>or we can plot the timeseries of the resistor&#39;s voltage:</p><pre><code class="language-julia hljs">plot(sol, idxs = [rc_model.resistor.v])</code></pre><img src="3e1a07e9.svg" alt="Example block output"/><p>Although it may be more confusing than helpful here, we can of course also plot all unknown and observed variables together:</p><pre><code class="language-julia hljs">plot(sol, idxs = [unknowns(rc_model); observables(rc_model)])</code></pre><img src="640ef185.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../ode_modeling/">« Getting Started with ModelingToolkit.jl</a><a class="docs-footer-nextpage" href="../nonlinear/">Modeling Nonlinear Systems »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 26 March 2026 15:22">Thursday 26 March 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

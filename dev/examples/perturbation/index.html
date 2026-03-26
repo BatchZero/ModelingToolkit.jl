@@ -24,41 +24,41 @@ Interpolation: 3rd order Hermite
 t: 17-element Vector{Float64}:
  0.0
  0.0009990005004983772
- 0.010989005505482149
- 0.050323201520099475
- 0.10988625821422165
- 0.17976131889392957
- 0.2685822002061843
- 0.37704291021657915
- 0.5150699918763888
- 0.6895893855495662
- 0.9121374549979837
- 1.1969237822790968
- 1.5496867745920098
- 1.9254996658947618
- 2.3244234888380926
- 2.747063109192439
+ 0.020708314786087156
+ 0.06894731869334476
+ 0.13253582182187518
+ 0.21036076542030058
+ 0.30632803825525945
+ 0.42593588394873005
+ 0.5774540453615378
+ 0.7697466565216907
+ 1.014937005005464
+ 1.3292834879470894
+ 1.6920296325025312
+ 2.071933756757127
+ 2.4735614550397287
+ 2.937624189039
  3.0
 u: 17-element Vector{Vector{Float64}}:
  [0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
  [-2.488196097577267e-13, 3.3225183183212947e-10, 0.0009985014994983792, -9.96091672587352e-10, 9.976696651635089e-7, 0.9990009994995016]
- [-3.616313645853468e-9, 4.4112244930411036e-7, 0.010928626384482389, -1.313675024660254e-6, 0.00012031590433746151, 0.9890109944945178]
- [-1.5446236873125787e-6, 4.1945473480873235e-5, 0.049056989214483204, -0.00012162013827075771, 0.0024899447065507025, 0.9496767984799005]
- [-3.356778897522297e-5, 0.00043014136554910947, 0.10384876334206036, -0.0011961578797763368, 0.01163269793066302, 0.8901137417857783]
- [-0.00022766884565584688, 0.0018492600559848445, 0.16360425300868706, -0.004886057770148157, 0.030377854788493475, 0.8202386811060703]
- [-0.0010561563724513826, 0.0060245458576349475, 0.23251400107238687, -0.014860759516862308, 0.06567821408037469, 0.7314177997938156]
- [-0.0037432549829311493, 0.016182822881957857, 0.3059622321442855, -0.036472231061079205, 0.12429437899755692, 0.6229570897834208]
- [-0.011519993739428212, 0.03968364533277146, 0.3824214436106172, -0.0787754252259981, 0.2197482387464324, 0.4849300081236112]
- [-0.03123009689695499, 0.0904632786678382, 0.4518226252182521, -0.1492237744354559, 0.3662258978886398, 0.3104106144504339]
- [-0.07489557108797736, 0.19527991709526749, 0.49614008659288455, -0.2401187555898396, 0.5790302162082741, 0.0878625450020164]
- [-0.15257432818111172, 0.4005466921178069, 0.48061051198644794, -0.2837355009128571, 0.8610449480683734, -0.19692378227909657]
- [-0.2264891132383536, 0.7599274601009123, 0.34892222491931746, -0.07344287192068476, 1.160989804660918, -0.5496867745920095]
- [-0.14128168530832333, 1.2341348204367515, 0.07172518421434361, 0.6091185233659987, 1.3279208666142521, -0.9254996658947615]
- [0.3226927609070924, 1.753592922085515, -0.37704878889303023, 1.7605042472862638, 1.2167008109268078, -1.324423488838092]
- [1.3123578427272624, 2.164481412673811, -1.0261147537505726, 2.791184265640095, 0.6362505847444941, -1.747063109192438]
- [2.02499470614646, 2.2500000000000058, -1.4999999999999962, 2.700000000000024, 1.426739902911473e-14, -1.9999999999999991]</code></pre><p>This is the solution for the coefficients in the series for <span>$x(t)$</span> and their derivatives. Finally, we calculate the solution to the original problem by summing the series for different <span>$ϵ$</span>:</p><pre><code class="language-julia hljs">using Plots
+ [-4.527896778109e-8, 2.9448203291609016e-6, 0.020493897635447317, -8.712559925343637e-6, 0.0004258741560456801, 0.9792916852139129]
+ [-5.367134414212015e-6, 0.00010736921115519868, 0.06657045231584394, -0.0003073279628567118, 0.004644480379254272, 0.9310526813066553]
+ [-6.980712897569566e-5, 0.0007503171615173191, 0.12375294978887527, -0.002052745258608169, 0.016789713957433124, 0.8674641781781249]
+ [-0.00041667948092658603, 0.0029397530465558224, 0.18823493960619325, -0.007589307242211475, 0.041148714525673376, 0.7896392345796995]
+ [-0.0017320767075391559, 0.0088478413291884, 0.2594096047446017, -0.021167795698629213, 0.08425524589109573, 0.6936719617447407]
+ [-0.005840710977795418, 0.023015148550128955, 0.3352251953311372, -0.04967314257937785, 0.15566341900856412, 0.5740641160512701]
+ [-0.017159256298243237, 0.054918709886482814, 0.41072745810933553, -0.10240019568061678, 0.26926854631899944, 0.42254595463846245]
+ [-0.044580129252127704, 0.12277184209701167, 0.4734916989085302, -0.18381298666826487, 0.4404824064925175, 0.23025334347830959]
+ [-0.10123265929080992, 0.26006955624791617, 0.499888442940734, -0.27024939809474324, 0.681602560786562, -0.014937005005463607]
+ [-0.1882406081015135, 0.5227564206996228, 0.44578619228270056, -0.2476593356583539, 0.9840490134803923, -0.32928348794708884]
+ [-0.2235545665254375, 0.9316930935683745, 0.2605474938692075, 0.1266781990756235, 1.2482241459561962, -0.6920296325025306]
+ [-0.024286458718047098, 1.4291187048409741, -0.07452098943772163, 0.9983255228277838, 1.3280347950612623, -1.0719337567571265]
+ [0.6188868100963697, 1.9251571755984034, -0.5856916808893982, 2.205175292417584, 1.0736725130291238, -1.473561455039728]
+ [1.8529049268476956, 2.244324417937521, -1.3771937489745165, 2.8068787920050053, 0.1794268453551227, -1.9376241890389991]
+ [2.024992891036536, 2.2500000000000067, -1.4999999999999951, 2.7000000000000277, 1.4694173858928258e-14, -1.9999999999999991]</code></pre><p>This is the solution for the coefficients in the series for <span>$x(t)$</span> and their derivatives. Finally, we calculate the solution to the original problem by summing the series for different <span>$ϵ$</span>:</p><pre><code class="language-julia hljs">using Plots
 ϵs = 0.0:0.1:1.0
-plot(sol; idxs = [substitute(x_series, ϵ =&gt; ϵᵢ) for ϵᵢ in ϵs], label = permutedims([&quot;ϵ = $ϵᵢ&quot; for ϵᵢ in ϵs]))</code></pre><img src="47704cbb.svg" alt="Example block output"/><p>This makes sense: for larger <span>$ϵ$</span>, gravity weakens with altitude, and the trajectory goes higher for a fixed initial velocity.</p><p>An advantage of the perturbative method is that we run the ODE solver only once and calculate trajectories for several <span>$ϵ$</span> for free. Had we solved the full unperturbed ODE directly, we would need to do repeat it for every <span>$ϵ$</span>.</p><h2 id="Weakly-nonlinear-oscillator"><a class="docs-heading-anchor" href="#Weakly-nonlinear-oscillator">Weakly nonlinear oscillator</a><a id="Weakly-nonlinear-oscillator-1"></a><a class="docs-heading-anchor-permalink" href="#Weakly-nonlinear-oscillator" title="Permalink"></a></h2><p>Our second example applies perturbation theory to nonlinear oscillators – a very important class of problems. As we will see, perturbation theory has difficulty providing a good solution to this problem, but the process is nevertheless instructive. This example closely follows chapter 7.6 of <em>Nonlinear Dynamics and Chaos</em> by Steven Strogatz.</p><p>The goal is to solve the ODE</p><pre><code class="language-julia hljs">eq = D(D(x)) + 2 * ϵ * D(x) + x ~ 0</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">x(t) + Differential(t, 2)(x(t)) + <span class="sgr34">2</span>Differential(t, 1)(x(t))*ϵ ~ <span class="sgr34">0</span></code></pre><p>with initial conditions <span>$x(0) = 0$</span> and <span>$ẋ(0) = 1$</span>. With <span>$ϵ = 0$</span>, the problem reduces to the simple linear harmonic oscillator with the exact solution <span>$x(t) = \sin(t)$</span>.</p><p>We follow the same steps as in the previous example to construct the <code>System</code>:</p><pre><code class="language-julia hljs">eq_pert = substitute_in_deriv(eq, x =&gt; x_series)
+plot(sol; idxs = [substitute(x_series, ϵ =&gt; ϵᵢ) for ϵᵢ in ϵs], label = permutedims([&quot;ϵ = $ϵᵢ&quot; for ϵᵢ in ϵs]))</code></pre><img src="e4eae489.svg" alt="Example block output"/><p>This makes sense: for larger <span>$ϵ$</span>, gravity weakens with altitude, and the trajectory goes higher for a fixed initial velocity.</p><p>An advantage of the perturbative method is that we run the ODE solver only once and calculate trajectories for several <span>$ϵ$</span> for free. Had we solved the full unperturbed ODE directly, we would need to do repeat it for every <span>$ϵ$</span>.</p><h2 id="Weakly-nonlinear-oscillator"><a class="docs-heading-anchor" href="#Weakly-nonlinear-oscillator">Weakly nonlinear oscillator</a><a id="Weakly-nonlinear-oscillator-1"></a><a class="docs-heading-anchor-permalink" href="#Weakly-nonlinear-oscillator" title="Permalink"></a></h2><p>Our second example applies perturbation theory to nonlinear oscillators – a very important class of problems. As we will see, perturbation theory has difficulty providing a good solution to this problem, but the process is nevertheless instructive. This example closely follows chapter 7.6 of <em>Nonlinear Dynamics and Chaos</em> by Steven Strogatz.</p><p>The goal is to solve the ODE</p><pre><code class="language-julia hljs">eq = D(D(x)) + 2 * ϵ * D(x) + x ~ 0</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">x(t) + Differential(t, 2)(x(t)) + <span class="sgr34">2</span>Differential(t, 1)(x(t))*ϵ ~ <span class="sgr34">0</span></code></pre><p>with initial conditions <span>$x(0) = 0$</span> and <span>$ẋ(0) = 1$</span>. With <span>$ϵ = 0$</span>, the problem reduces to the simple linear harmonic oscillator with the exact solution <span>$x(t) = \sin(t)$</span>.</p><p>We follow the same steps as in the previous example to construct the <code>System</code>:</p><pre><code class="language-julia hljs">eq_pert = substitute_in_deriv(eq, x =&gt; x_series)
 eqs_pert = taylor_coeff(eq_pert, ϵ, 0:2)
 @mtkcompile sys = System(eqs_pert, t)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr1">Model sys:</span>
 <span class="sgr1">Equations (6):</span>
@@ -75,4 +75,4 @@ plot(sol, idxs = substitute(x_series, ϵ =&gt; 0.1); label = &quot;Perturbative 
 
 x_exact(t, ϵ) = exp(-ϵ * t) * sin(√(1 - ϵ^2) * t) / √(1 - ϵ^2)
 @assert isapprox(
-plot!(sol.t, x_exact.(sol.t, 0.1); label = &quot;Exact (ϵ=0.1)&quot;)</code></pre><img src="f90c73e8.svg" alt="Example block output"/><p>This is similar to Figure 7.6.2 in <em>Nonlinear Dynamics and Chaos</em>. The two curves fit well for the first couple of cycles, but then the perturbative solution diverges from the exact solution. The main reason is that the problem has two or more time-scales that introduce secular terms in the solution. One solution is to explicitly account for the two time scales and use an analytic method called <em>two-timing</em>, but this is outside the scope of this example.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../sparse_jacobians/">« Automated Sparse Analytical Jacobians</a><a class="docs-footer-nextpage" href="../../API/System/">The <code>System</code> type »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 24 February 2026 13:41">Tuesday 24 February 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot!(sol.t, x_exact.(sol.t, 0.1); label = &quot;Exact (ϵ=0.1)&quot;)</code></pre><img src="e9fab479.svg" alt="Example block output"/><p>This is similar to Figure 7.6.2 in <em>Nonlinear Dynamics and Chaos</em>. The two curves fit well for the first couple of cycles, but then the perturbative solution diverges from the exact solution. The main reason is that the problem has two or more time-scales that introduce secular terms in the solution. One solution is to explicitly account for the two time scales and use an analytic method called <em>two-timing</em>, but this is outside the scope of this example.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../sparse_jacobians/">« Automated Sparse Analytical Jacobians</a><a class="docs-footer-nextpage" href="../../API/System/">The <code>System</code> type »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 26 March 2026 15:21">Thursday 26 March 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
