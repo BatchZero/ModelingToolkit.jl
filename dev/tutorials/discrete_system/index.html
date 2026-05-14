@@ -49,27 +49,27 @@ t: 101-element Vector{Float64}:
  100.0
 u: 101-element Vector{Vector{Float64}}:
  [990.0, 0.0, 10.0]
- [989.5051237293776, 0.24690087971667385, 10.247975390905728]
- [988.9982323978576, 0.4999242936496187, 10.501843308492766]
- [988.479053494723, 0.7592157288009715, 10.761730776476043]
- [987.9473092971556, 1.0249238083995653, 11.027766894444875]
- [987.4027168203793, 1.2972003431544505, 11.300082836466315]
- [986.8449877701768, 1.5762003824739326, 11.57881184734931]
- [986.2738284979789, 1.8620822655923717, 11.86408923642869]
- [985.6889399587333, 2.1550076725435083, 12.156052368723218]
+ [989.5051237293776, 0.24690087971667385, 10.24797539090573]
+ [988.9982323978576, 0.49992429364961877, 10.501843308492768]
+ [988.479053494723, 0.7592157288009717, 10.761730776476044]
+ [987.9473092971556, 1.0249238083995655, 11.027766894444877]
+ [987.4027168203793, 1.2972003431544508, 11.300082836466316]
+ [986.8449877701768, 1.5762003824739328, 11.578811847349312]
+ [986.2738284979789, 1.8620822655923719, 11.864089236428692]
+ [985.6889399587333, 2.1550076725435083, 12.15605236872322]
  [985.090017671768, 2.45514167491548, 12.454840653316563]
  ⋮
- [847.1408257083083, 76.95307768711389, 75.90609660457734]
+ [847.1408257083083, 76.95307768711389, 75.90609660457736]
  [843.9317615809414, 78.82720588986679, 77.24103252919139]
  [840.6787392619304, 80.73429377803495, 78.58696696003413]
- [837.3819011012713, 82.67461290570472, 79.9434859930235]
- [834.0414203767291, 84.64842460763423, 81.31015501563623]
- [830.6575018520915, 86.6559794879602, 82.68651865994781]
- [827.2303822969169, 88.69751690774523, 84.07210079533739]
- [823.7603309652128, 90.77326447234499, 85.46640456244167]
- [820.2476500305196, 92.88343751961379, 86.86891244986609]</code></pre><p>All shifts must be non-positive, i.e., discrete-time variables may only be indexed at index <code>k, k-1, k-2, ...</code>. If default values are provided, they are treated as the value of the variable at the previous timestep. For example, consider the following system to generate the Fibonacci series:</p><pre><code class="language-julia hljs">@variables x(t) = 1.0
+ [837.3819011012713, 82.67461290570472, 79.94348599302349]
+ [834.0414203767291, 84.64842460763423, 81.31015501563621]
+ [830.6575018520915, 86.6559794879602, 82.6865186599478]
+ [827.2303822969169, 88.69751690774523, 84.07210079533738]
+ [823.7603309652128, 90.77326447234499, 85.46640456244165]
+ [820.2476500305196, 92.88343751961379, 86.86891244986607]</code></pre><p>All shifts must be non-positive, i.e., discrete-time variables may only be indexed at index <code>k, k-1, k-2, ...</code>. If default values are provided, they are treated as the value of the variable at the previous timestep. For example, consider the following system to generate the Fibonacci series:</p><pre><code class="language-julia hljs">@variables x(t) = 1.0
 @mtkcompile sys = System([x ~ x(k - 1) + x(k - 2)], t)</code></pre><p class="math-container">\[ \begin{align}
 Shift(t, 1)\left( \mathtt{x_{t - 2}}\left( t \right) \right) &amp;= \mathtt{x_{t - 1}}\left( t \right) \\
 Shift(t, 1)\left( \mathtt{x_{t - 1}}\left( t \right) \right) &amp;= x\left( t \right)
 \end{align}
- \]</p><p>The &quot;default value&quot; here should be interpreted as the value of <code>x</code> at all past timesteps. For example, here <code>x(k-1)</code> and <code>x(k-2)</code> will be <code>1.0</code>, and the initial value of <code>x(k)</code> will thus be <code>2.0</code>. During problem construction, the <em>past</em> value of a variable should be provided. For example, providing <code>[x =&gt; 1.0]</code> while constructing this problem will error. Provide <code>[x(k-1) =&gt; 1.0]</code> instead. Note that values provided during problem construction <em>do not</em> apply to the entire history. Hence, if <code>[x(k-1) =&gt; 2.0]</code> is provided, the value of <code>x(k-2)</code> will still be <code>1.0</code>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../dynamic_optimization/">« Solving Dynamic Optimization Problems</a><a class="docs-footer-nextpage" href="../parameter_identifiability/">Parameter Identifiability in ODE Models »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 14 May 2026 10:57">Thursday 14 May 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ \]</p><p>The &quot;default value&quot; here should be interpreted as the value of <code>x</code> at all past timesteps. For example, here <code>x(k-1)</code> and <code>x(k-2)</code> will be <code>1.0</code>, and the initial value of <code>x(k)</code> will thus be <code>2.0</code>. During problem construction, the <em>past</em> value of a variable should be provided. For example, providing <code>[x =&gt; 1.0]</code> while constructing this problem will error. Provide <code>[x(k-1) =&gt; 1.0]</code> instead. Note that values provided during problem construction <em>do not</em> apply to the entire history. Hence, if <code>[x(k-1) =&gt; 2.0]</code> is provided, the value of <code>x(k-2)</code> will still be <code>1.0</code>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../dynamic_optimization/">« Solving Dynamic Optimization Problems</a><a class="docs-footer-nextpage" href="../parameter_identifiability/">Parameter Identifiability in ODE Models »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 14 May 2026 12:30">Thursday 14 May 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
