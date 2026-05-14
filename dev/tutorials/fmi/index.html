@@ -171,7 +171,7 @@ u: 11-element Vector{Float64}:
 └ @ FMIImport ~/.julia/packages/FMIImport/J9ezz/src/FMI3/md.jl:159
 ┌ Warning: FMU has TypeDefinitions, but parsing is not implemented yet.
 └ @ FMIImport ~/.julia/packages/FMIImport/J9ezz/src/FMI3/md.jl:159
-[ Info: createFMU3(...): FMU resources location is `file:////tmp/fmijl_0dFiRK/SpringPendulum1D/resources`
+[ Info: createFMU3(...): FMU resources location is `file:////tmp/fmijl_cTQXei/SpringPendulum1D/resources`
 [ Info: createFMU3(...): FMU supports both CS and ME, using CS as default if nothing specified.</code></pre><p>This FMU has fewer equations, partly due to missing aliasing variables and partly due to being a CS FMU. CoSimulation FMUs are bundled with an integrator. As such, they do not function like ME FMUs. Instead, a callback steps the FMU at periodic intervals in time and obtains the updated state. This state is held constant until the next time the callback triggers. The periodic interval must be specified through the <code>communication_step_size</code> keyword argument. A smaller step size typically leads to less error but is more computationally expensive.</p><p>This model alone does not have any differential variables, and calling <code>mtkcompile</code> will lead to an <code>System</code> with no unknowns.</p><pre><code class="language-julia hljs">mtkcompile(inner)</code></pre><p class="math-container">\[ \begin{align}
 \end{align}
  \]</p><p>Simulating this model will cause the OrdinaryDiffEq integrator to immediately finish, and will not trigger the callback. Thus, we wrap this system in a trivial system with a differential variable.</p><pre><code class="language-julia hljs">@variables x(t) = 1.0
@@ -277,18 +277,18 @@ end</code></pre><p><code>a</code> and <code>b</code> are inputs, <code>c</code> 
 <span class="sgr1">Equations (4):</span>
   4 standard: see equations(sys)
 <span class="sgr1">Unknowns (4):</span> see unknowns(sys)
+  adder₊a(t)
+  adder₊b(t)
   c(t)
   adder₊c(t)
-  b(t)
-  a(t)
 <span class="sgr1">Parameters (2):</span> see parameters(sys)
   adder₊value
   adder₊wrapper
 <span class="sgr1">Observed (5):</span> see observed(sys)</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; equations(sys)</code><code class="nohighlight hljs ansi" style="display:block;">4-element Vector{Equation}:
+ Differential(t, 1)(adder₊a(t)) ~ t
+ Differential(t, 1)(adder₊b(t)) ~ adder₊c(t) + adder₊out(t)
  <span class="sgr34">0</span> ~ adder₊value + adder₊out(t) - (c(t)^<span class="sgr34">2</span>)
- Differential(t, 1)(adder₊c(t)) ~ adder₊cˍt(t)
- Differential(t, 1)(b(t)) ~ adder₊c(t) + adder₊out(t)
- Differential(t, 1)(a(t)) ~ t</code></pre><p>Note how the output <code>adder.out</code> is used in an algebraic equation of the system. We have also given <code>sys.c</code> a guess, expecting it to be solved for by initialization. ModelingToolkit is able to use FMUs in initialization to solve for initial states. As mentioned earlier, we cannot differentiate through an FMU. Thus, automatic differentiation has to be disabled for the solver.</p><pre><code class="language-julia hljs">prob = ODEProblem(
+ Differential(t, 1)(adder₊c(t)) ~ adder₊cˍt(t)</code></pre><p>Note how the output <code>adder.out</code> is used in an algebraic equation of the system. We have also given <code>sys.c</code> a guess, expecting it to be solved for by initialization. ModelingToolkit is able to use FMUs in initialization to solve for initial states. As mentioned earlier, we cannot differentiate through an FMU. Thus, automatic differentiation has to be disabled for the solver.</p><pre><code class="language-julia hljs">prob = ODEProblem(
     sys, [sys.adder.c =&gt; 2.0, sys.a =&gt; 1.0, sys.b =&gt; 1.0, sys.adder.value =&gt; 2.0],
     (0.0, 1.0))
 solve(prob, Rodas5P(autodiff = false))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">retcode: Success
@@ -296,29 +296,29 @@ Interpolation: specialized 4th (Rodas6P = 5th) order &quot;free&quot; stiffness-
 t: 12-element Vector{Float64}:
  0.0
  1.0e-6
- 3.3712164065407424e-5
- 0.00036083380471948166
- 0.003632050211260224
- 0.03634421427666765
- 0.1305978836311682
- 0.27845849749913176
- 0.48030578696165416
- 0.685366910284355
- 0.9024931314282548
+ 3.371217563311786e-5
+ 0.0003608339319642964
+ 0.003632051495276082
+ 0.036344227128393934
+ 0.13059741312732587
+ 0.27845715639645174
+ 0.4803035814658654
+ 0.6853647947287707
+ 0.9024906378872282
  1.0
 u: 12-element Vector{Vector{Float64}}:
- [2.4494897532242415, 2.0, 1.0, 1.0]
- [2.449490967528866, 2.000004000003, 1.000006000005, 1.0000000000005]
- [2.449531032511184, 2.000134852065862, 1.000202278667051, 1.0000000005682552]
- [2.4499317784516244, 2.001443725908126, 1.0021656539666224, 1.0000000651005174]
- [2.45394885685563, 2.014567864175605, 1.021858396168689, 1.0000065958943687]
- [2.49508884120017, 2.14942882676354, 1.2248078750472842, 1.0006604509556944]
- [2.6237491065627436, 2.5778578575383344, 1.8755316018699255, 1.00852790360447]
- [2.8576360749029144, 3.390716177623135, 3.127315050369631, 1.0387695674147368]
- [3.246180023336325, 4.860967189591723, 5.42231878070794, 1.1153468244944271]
- [3.732895729986476, 6.940110310886923, 8.699552415653608, 1.2348639008563627]
- [4.364044744730068, 10.053066304190827, 13.637306231012989, 1.4072469261375897]
- [4.691007998685333, 11.855536362457716, 16.50555089501592, 1.5000000000000024]</code></pre><p>CoSimulation FMUs follow a nearly identical process. Since CoSimulation FMUs operate using callbacks, after triggering the callbacks and altering the discrete state the algebraic equations may no longer be satisfied. To resolve for the values of algebraic variables, we use the <code>reinitializealg</code> keyword of <code>FMIComponent</code>. This is a DAE initialization algorithm to use at the end of every callback. Since CoSimulation FMUs are not directly involved in the RHS of the system - instead operating through callbacks - we can use a solver with automatic differentiation.</p><pre><code class="language-julia hljs">fmu = loadFMU(
+ [1.0, 1.0, 2.4494897532242415, 2.0]
+ [1.0000000000005, 1.000006000005, 2.449490967528866, 2.000004000003]
+ [1.0000000005682554, 1.0002022787364613, 2.449531032525352, 2.0001348521121347]
+ [1.0000000651005634, 1.0021656547305509, 2.449931778607542, 2.0014437264173797]
+ [1.0000065958990323, 1.0218584039195642, 2.453948858435846, 2.014567869339743]
+ [1.0006604514227802, 1.2248079569754695, 2.495088857711631, 2.1494288810678945]
+ [1.0085278421577748, 1.8755280910137628, 2.623748425799791, 2.577855559571467]
+ [1.0387691939741992, 3.1273022337379595, 2.8576337670401166, 3.390707908282839]
+ [1.1153457651844698, 5.4222892301446635, 3.2461753084399683, 4.860948359848058]
+ [1.234862450926807, 8.69951248565818, 3.732890187244177, 6.940085063020702]
+ [1.407244675737051, 13.637238662051926, 4.364036744654112, 10.053023802882793]
+ [1.5000000000000033, 16.50555089494004, 4.691007998757056, 11.855536362360596]</code></pre><p>CoSimulation FMUs follow a nearly identical process. Since CoSimulation FMUs operate using callbacks, after triggering the callbacks and altering the discrete state the algebraic equations may no longer be satisfied. To resolve for the values of algebraic variables, we use the <code>reinitializealg</code> keyword of <code>FMIComponent</code>. This is a DAE initialization algorithm to use at the end of every callback. Since CoSimulation FMUs are not directly involved in the RHS of the system - instead operating through callbacks - we can use a solver with automatic differentiation.</p><pre><code class="language-julia hljs">fmu = loadFMU(
     joinpath(@__DIR__, &quot;..&quot;, &quot;..&quot;, &quot;..&quot;, &quot;test&quot;, &quot;fmi&quot;, &quot;fmus&quot;, &quot;SimpleAdder.fmu&quot;);
     type = :CS)
 @named adder = ModelingToolkit.FMIComponent(
@@ -375,4 +375,4 @@ u: 2004-element Vector{Vector{Float64}}:
  [4.681757919680873, 16.420855218475776, 1.4980019999999845]
  [4.681757919678864, 16.45258983225982, 1.4990004999999846]
  [4.685252429942133, 16.45258983225982, 1.4990004999999846]
- [4.68525242994012, 16.484377130747994, 1.4999999999999847]</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../disturbance_modeling/">« Disturbance and input modeling modeling</a><a class="docs-footer-nextpage" href="../../examples/higher_order/">Automatic Transformation of Nth Order ODEs to 1st Order ODEs »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 12 May 2026 10:01">Tuesday 12 May 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ [4.68525242994012, 16.484377130747994, 1.4999999999999847]</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../disturbance_modeling/">« Disturbance and input modeling modeling</a><a class="docs-footer-nextpage" href="../../examples/higher_order/">Automatic Transformation of Nth Order ODEs to 1st Order ODEs »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 14 May 2026 07:56">Thursday 14 May 2026</span>. Using Julia version 1.10.11.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
